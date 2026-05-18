@@ -10,6 +10,7 @@ import OptionsPanel from '@/components/OptionsPanel'
 import OutputPanel from '@/components/OutputPanel'
 import HistorySidebar from '@/components/HistorySidebar'
 import RefinementChat from '@/components/RefinementChat'
+import FigmaInput from '@/components/FigmaInput'
 import { useCodeGeneration } from '@/hooks/useCodeGeneration'
 import { useHistory } from '@/hooks/useHistory'
 import { useRefinement } from '@/hooks/useRefinement'
@@ -111,6 +112,16 @@ function LeftPanel({
           style={{ display:'flex', flexDirection:'column', gap:'16px', width:'100%', padding:'20px 20px 0' }}
         >
           <motion.div variants={itemVariants}><SectionLabel number="01" text="Upload Design" /></motion.div>
+
+          {/* Figma import — shown when no image yet */}
+          {!image && (
+            <motion.div variants={itemVariants}>
+              <FigmaInput
+                onImageFetched={handleSetImage}
+                isDisabled={isLoading}
+              />
+            </motion.div>
+          )}
 
           <motion.div variants={itemVariants}>
             <AnimatePresence mode="wait">
