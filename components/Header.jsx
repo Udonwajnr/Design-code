@@ -4,7 +4,11 @@ import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function Header() {
+export default function Header({
+  historyCount = 0,
+  onOpenHistory,
+  historyOpen,
+}) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -184,6 +188,66 @@ export default function Header() {
         transition={{ delay: 0.2, duration: 0.45 }}
         style={{ display: "flex", alignItems: "center", gap: "8px" }}
       >
+        {/* History toggle */}
+        {onOpenHistory && (
+          <motion.button
+            onClick={onOpenHistory}
+            whileHover={{ scale: 1.07 }}
+            whileTap={{ scale: 0.92 }}
+            title={historyOpen ? "Close history" : "Open history"}
+            style={{
+              ...navBtn,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "5px",
+              color: historyOpen
+                ? "var(--accent-primary)"
+                : "var(--text-secondary)",
+              background: historyOpen
+                ? "rgba(124,106,255,0.1)"
+                : "var(--bg-card)",
+              borderColor: historyOpen
+                ? "rgba(124,106,255,0.3)"
+                : "var(--border-default)",
+              paddingLeft: "10px",
+              paddingRight: historyCount > 0 ? "8px" : "10px",
+              width: "auto",
+            }}
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
+              <path d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {historyCount > 0 && (
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "9px",
+                  fontWeight: 700,
+                  color: historyOpen
+                    ? "var(--accent-primary)"
+                    : "var(--text-muted)",
+                  background: "var(--bg-secondary)",
+                  border: "1px solid var(--border-subtle)",
+                  padding: "1px 5px",
+                  borderRadius: "99px",
+                }}
+              >
+                {historyCount}
+              </span>
+            )}
+          </motion.button>
+        )}
+
         {/* GitHub */}
         <motion.a
           href="https://github.com"

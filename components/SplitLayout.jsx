@@ -92,7 +92,7 @@ export default function SplitLayout({ leftPanel, rightPanel }) {
         </div>
 
         {/* Left panel content */}
-        <div style={{ flex: 1, overflow: 'auto', padding: '20px' }}>
+        <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
           {leftPanel}
         </div>
       </div>

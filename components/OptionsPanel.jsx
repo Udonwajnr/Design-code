@@ -14,10 +14,10 @@ const STYLING = [
   { id: 'styled', label: 'Styled Comp.', icon: '💅' },
 ]
 
-export default function OptionsPanel({ onGenerate, isLoading, hasImage }) {
-  const [framework, setFramework] = useState('react')
-  const [styling, setStyling] = useState('tailwind')
-  const [instructions, setInstructions] = useState('')
+export default function OptionsPanel({ onGenerate, isLoading, hasImage, initialOptions }) {
+  const [framework, setFramework] = useState(initialOptions?.framework || 'react')
+  const [styling, setStyling] = useState(initialOptions?.styling || 'tailwind')
+  const [instructions, setInstructions] = useState(initialOptions?.instructions || '')
   const [isExpanded, setIsExpanded] = useState(true)
 
   const handleGenerate = () => {

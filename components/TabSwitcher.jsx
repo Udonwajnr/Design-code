@@ -5,23 +5,41 @@ const TABS = [
     id: 'code',
     label: 'Code',
     icon: (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
       </svg>
     ),
+    requiresDone:  false,
+    requiresImage: false,
+    tooltip: null,
   },
   {
     id: 'preview',
     label: 'Preview',
     icon: (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
         <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
       </svg>
     ),
+    requiresDone:  true,
+    requiresImage: false,
+    tooltip: 'Generate code first',
+  },
+  {
+    id: 'compare',
+    label: 'Compare',
+    icon: (
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <path d="M8 9l-4 3 4 3M16 9l4 3-4 3M12 3v18"/>
+      </svg>
+    ),
+    requiresDone:  true,
+    requiresImage: true,
+    tooltip: 'Generate code and upload image first',
   },
 ]
 
-export default function TabSwitcher({ activeTab, onChange, hasCode }) {
+export default function TabSwitcher({ activeTab, onChange, hasCode, hasImage }) {
   return (
     <div style={{
       display: 'flex',
@@ -32,26 +50,28 @@ export default function TabSwitcher({ activeTab, onChange, hasCode }) {
       border: '1px solid var(--border-subtle)',
     }}>
       {TABS.map(tab => {
-        const isActive = activeTab === tab.id
-        const isDisabled = tab.id === 'preview' && !hasCode
+        const isDisabled = (tab.requiresDone && !hasCode) || (tab.requiresImage && !hasImage)
+        const isActive   = activeTab === tab.id
 
         return (
           <button
             key={tab.id}
             onClick={() => !isDisabled && onChange(tab.id)}
             disabled={isDisabled}
-            title={isDisabled ? 'Generate code first to see preview' : tab.label}
+            title={isDisabled ? tab.tooltip : tab.label}
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '5px',
-              padding: '4px 12px',
+              padding: '4px 11px',
               borderRadius: '6px',
               border: 'none',
               cursor: isDisabled ? 'not-allowed' : 'pointer',
               background: isActive ? 'var(--bg-card)' : 'transparent',
               color: isActive
-                ? 'var(--accent-primary)'
+                ? tab.id === 'compare'
+                  ? 'var(--accent-secondary)'
+                  : 'var(--accent-primary)'
                 : isDisabled
                 ? 'var(--text-muted)'
                 : 'var(--text-secondary)',
@@ -76,12 +96,7 @@ export default function TabSwitcher({ activeTab, onChange, hasCode }) {
               }
             }}
           >
-            <span style={{
-              color: isActive ? 'var(--accent-primary)' : isDisabled ? 'var(--text-muted)' : 'var(--text-secondary)',
-              transition: 'color 0.15s ease',
-              display: 'flex',
-              alignItems: 'center',
-            }}>
+            <span style={{ display: 'flex', alignItems: 'center', color: 'inherit' }}>
               {tab.icon}
             </span>
             {tab.label}
